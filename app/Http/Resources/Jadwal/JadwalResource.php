@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Jadwal;
 
+use App\Http\Resources\Dosen\DosenCollection;
+use App\Http\Resources\Dosen\DosenResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JadwalResource extends JsonResource
@@ -22,6 +24,9 @@ class JadwalResource extends JsonResource
             'kelas' => $this->kelas,
             'matkul' => $this->matakuliah->name,
             'sks' => $this->matakuliah->sks,
+            $this->mergeWhen(!$request->user()->isDosen(), [
+                'dosen' => $this->when($this->dosen, DosenResource::collection($this->dosen))
+            ])
         ];
     }
 }

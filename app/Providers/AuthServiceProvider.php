@@ -22,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Mahasiswa' => 'App\Policies\MahasiswaPolicy',
         'App\Models\MataKuliah' => 'App\Policies\MataKuliahPolicy',
         'App\Models\JadwalMahasiswa' => 'App\Policies\JadwalMahasiswaPolicy',
+        'App\Models\JadwalDosen' => 'App\Policies\JadwalDosenPolicy',
     ];
 
     /**

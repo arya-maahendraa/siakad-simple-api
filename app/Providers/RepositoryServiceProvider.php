@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Interfaces\Repositories\EnrollJadwalRepositoryInterface;
 use App\Interfaces\Repositories\EnrollMatkulRepositoryInterface;
 use App\Interfaces\Repositories\FakultasRepositoryInterface;
+use App\Interfaces\Repositories\JadwalDosenRepositoryInterface;
 use App\Interfaces\Repositories\JadwalMahasiswaRepositoryInterface;
 use App\Interfaces\Repositories\JadwalRepositoryInterface;
 use App\Interfaces\Repositories\JurusanRepositoryInterface;
@@ -17,6 +18,7 @@ use App\Interfaces\Repositories\User\UserRepositoryInterface;
 use App\Repositories\EnrollJadwalRepository;
 use App\Repositories\EnrollMatkulRepository;
 use App\Repositories\FakultasRepository;
+use App\Repositories\JadwalDosenRepository;
 use App\Repositories\JadwalMahasiswaRepository;
 use App\Repositories\JadwalRepository;
 use App\Repositories\JurusanRepository;
@@ -85,6 +87,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             JadwalMahasiswaRepositoryInterface::class,
             JadwalMahasiswaRepository::class
+        );
+
+        $this->app->bind(
+            JadwalDosenRepositoryInterface::class,
+            JadwalDosenRepository::class
         );
     }
 

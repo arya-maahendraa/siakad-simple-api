@@ -31,6 +31,8 @@ class JadwalFormRequest extends FormRequest
             'jam' => 'required|string|max:20',
             'kelas' => 'required|string|max:10',
             'matkulId' => 'required|integer',
+            'dosen' => 'required|array',
+            'dosen.*' => 'required|integer',
         ];
     }
 }

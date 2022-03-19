@@ -24,4 +24,14 @@ class Jadwal extends Model
             'mahasiswa_id'
         );
     }
+
+    public function dosen()
+    {
+        return $this->belongsToMany(
+            Dosen::class,
+            'jadwal_dosen',
+            'jadwal_id',
+            'dosen_id'
+        );
+    }
 }

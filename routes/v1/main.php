@@ -92,6 +92,21 @@ Route::group([
    );
 
    // ++++++++++++++++++++++ Dosen
+   Route::post('jadwal/add/dosen/{dosen}/jadwal/{jadwal}', [
+      App\Http\Controllers\Api\JadwalDosenController::class,
+      'create'
+   ]);
+
+   Route::delete('jadwal/remove/dosen/{dosen}/jadwal/{jadwal}', [
+      App\Http\Controllers\Api\JadwalDosenController::class,
+      'destroy'
+   ]);
+
+   Route::get('jadwal/dosen/{dosen}', [
+      App\Http\Controllers\Api\JadwalDosenController::class,
+      'index'
+   ]);
+
    Route::apiResource(
       'user/dosen',
       App\Http\Controllers\Api\DosenController::class,

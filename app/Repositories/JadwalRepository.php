@@ -4,9 +4,10 @@ namespace App\Repositories;
 
 use App\Interfaces\Repositories\JadwalRepositoryInterface;
 use App\Models\Jadwal;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Interfaces\Repositories\JadwalDosenRepositoryInterface as JadwalDosen;
 
 class JadwalRepository implements JadwalRepositoryInterface
 {
@@ -15,7 +16,7 @@ class JadwalRepository implements JadwalRepositoryInterface
       return Jadwal::when(
          $prodi,
          fn ($query, $prodi) => $query->whereRelation('matakuliah', 'prodi_id', $prodi),
-         fn ($query, $prodi) => $query->with('matakuliah')
+         fn ($query) => $query->with('matakuliah')
       )->get();
    }
 
@@ -28,14 +29,32 @@ class JadwalRepository implements JadwalRepositoryInterface
 
    public function create(array $data): Jadwal
    {
-      $jadwal = new Jadwal;
-      $jadwal->tahun_ajaran_id = $data['tahunAjaranId'];
-      $jadwal->hari = $data['hari'];
-      $jadwal->jam = $data['jam'];
-      $jadwal->kelas = $data['kelas'];
-      $jadwal->matkul_id = $data['matkulId'];
-      $jadwal->save();
-      return $jadwal->fresh();
+      DB::beginTransaction();
+      try {
+         $jadwal = new Jadwal;
+         $jadwal->tahun_ajaran_id = $data['tahunAjaranId'];
+         $jadwal->hari = $data['hari'];
+         $jadwal->jam = $data['jam'];
+         $jadwal->kelas = $data['kelas'];
+         $jadwal->matkul_id = $data['matkulId'];
+         $jadwal->save();
+         $jadwal->fresh();
+
+         $listDosen = $data['dosen'];
+         if (!empty($listDosen)) {
+            $jadwalDosen = app()->make(JadwalDosen::class);
+            foreach ($listDosen as $dosen) {
+               $jadwalDosen->create($dosen, $jadwal->id);
+            }
+         }
+
+
+         DB::commit();
+         return $jadwal->fresh();
+      } catch (\Throwable $th) {
+         DB::rollBack();
+         throw $th;
+      }
    }
 
    public function update(array $data, int $id): Jadwal
